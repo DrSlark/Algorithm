@@ -1,55 +1,29 @@
-data class Node(
-    val value: Int,
-    var next: Node? = null
-)
+fun findLPS(s: String) {
+    val m = Array(s.length) { BooleanArray(s.length) }
 
-fun reverseNode(rawHead: Node?): Node? {
-    var p = rawHead
-    var h = rawHead
-    while (p != null) {
-        var pn = p.next
-        p.next = h
-        h = p
-        p = pn
+    var maxi = 0
+    var maxj = 0
+    var nowMaxLen = 1
+    for (j in 0 until s.length) {
+        m[j][j] = true
+        for (i in 0 until j) {
+            m[i][j] = s[i] == s[j] && (j - i <= 1 || m[i + 1][j - 1])
+            if (m[i][j]) {
+                if (nowMaxLen < j - i + 1) {
+                    nowMaxLen = j - i + 1
+                    maxi = i
+                    maxj = j
+                }
+            }
+        }
     }
-    rawHead?.next = null
-
-    return h
+    println( s.substring(maxi, maxj + 1))
 }
 
-fun reverseNode1(rawHead: Node?): Node? {
-    var p = rawHead
-    var h : Node? = null
-    while (p != null) {
-        var pn = p.next
-        p.next = h
-        h = p
-        p = pn
-    }
-
-
-    return h
-}
-
-
-fun printLink(head: Node?) {
-    var p: Node? = head
-    while (p != null) {
-        print("${p.value} ")
-        p = p.next
-    }
-    println()
-}
 
 fun main() {
-    val head = Node(0)
-    var p: Node? = head
-    for (i in 0 until 10) {
-        p?.next = Node((i + 1))
-        p = p?.next
-    }
-    printLink(head)
-    val rHead = reverseNode1(head)
-    printLink(rHead)
+    findLPS("aba")
+    findLPS("abdeedbaaba")
+    findLPS("abcdefg")
 
 }
